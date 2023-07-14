@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+
 // ------------------------------  SERVER DATA ------------------------------  
 
 let nextDogId = 1;
@@ -85,3 +88,20 @@ const deleteDog = (req, res) => {
 // ------------------------------  ROUTER ------------------------------  
 
 // Your code here
+
+// GET /dogs
+router.get('/', getAllDogs);
+
+// GET /dogs/:dogId
+router.get('/:dogId', validateDogId, getDogById);
+
+// POST /dogs
+router.post('/', validateDogInfo, createDog);
+
+// PUT /dogs/:dogId
+router.put('/:dogId', validateDogId, validateDogInfo, updateDog);
+
+// DELETE /dogs/:dogId
+router.delete('/:dogId', validateDogId, deleteDog);
+
+module.exports = router;

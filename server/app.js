@@ -8,6 +8,7 @@ app.use('/static', express.static('assets'));
 // For parsing JSON
 app.use(express.json());
 
+// -------------------------------- middleware ------------------------------ //
 // Logger middleware
 const loggerMiddleware = (req, res, next) => {
   console.log(`Incoming ${req.method} request to ${req.url}`);
@@ -20,15 +21,18 @@ const loggerMiddleware = (req, res, next) => {
 
 app.use(loggerMiddleware);
 
-// Resource not found middleware
+// -------------------------------------------------------------------------- //
+// Import the dog router
+const dogsRouter = require('./routes/dogs.js');
+// connect the dog router
+app.use('/dogs', dogsRouter);
 
+// Resource not found middleware
 const notFoundMiddleware = (req, res, next) => {
   const err = new Error("The requested resource couldn't be found.");
   err.statusCode = 404;
   next(err);
 };
-
-
 
 // For testing purposes, GET /
 app.get('/', (req, res) => {
