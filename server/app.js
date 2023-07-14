@@ -8,6 +8,28 @@ app.use('/static', express.static('assets'));
 // For parsing JSON
 app.use(express.json());
 
+// Logger middleware
+const loggerMiddleware = (req, res, next) => {
+  console.log(`Incoming ${req.method} request to ${req.url}`);
+
+  res.on('finish', () => {
+    console.log(`Outgoing response with status code ${res.statusCode}`);
+  })
+  next();
+}
+
+app.use(loggerMiddleware);
+
+// Resource not found middleware
+
+const notFoundMiddleware = (req, res, next) => {
+  const err = new Error("The requested resource couldn't be found.");
+  err.statusCode = 404;
+  next(err);
+};
+
+
+
 // For testing purposes, GET /
 app.get('/', (req, res) => {
   res.json("Express server running. No content provided at root level. Please use another route.");
@@ -25,6 +47,8 @@ app.post('/test-json', (req, res, next) => {
 app.get('/test-error', async (req, res) => {
   throw new Error("Hello World!")
 });
+
+app.use(notFoundMiddleware);
 
 const port = 5000;
 app.listen(port, () => console.log('Server is listening on port', port));
