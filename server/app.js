@@ -47,12 +47,23 @@ app.post('/test-json', (req, res, next) => {
   next();
 });
 
+// Error Handeling Middlware
+app.use((err, req, res, next) => {
+  console.error(err);
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Something went wrong";
+  const stack = process.env.NODE_ENV !== "production" ? err.stack : undefined;
+  res.status(statusCode).json({ message, statusCode, stack});
+});
+
+
 // For testing express-async-errors
 app.get('/test-error', async (req, res) => {
   throw new Error("Hello World!")
 });
 
 app.use(notFoundMiddleware);
+console.log(process.env.NODE_ENV)
 
 const port = 5000;
 app.listen(port, () => console.log('Server is listening on port', port));
