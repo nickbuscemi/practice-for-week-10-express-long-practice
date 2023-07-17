@@ -1,4 +1,5 @@
 const express = require('express');
+const foodsRouter = require('./dog-foods');
 const router = express.Router();
 
 // ------------------------------  SERVER DATA ------------------------------  
@@ -103,5 +104,8 @@ router.put('/:dogId', validateDogId, validateDogInfo, updateDog);
 
 // DELETE /dogs/:dogId
 router.delete('/:dogId', validateDogId, deleteDog);
+
+// Nest the foods router under /:dogId/foods
+router.use('/:dogId/foods', validateDogId, foodsRouter);
 
 module.exports = router;

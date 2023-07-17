@@ -1,4 +1,6 @@
 const express = require('express');
+const dogsRouter = require('./routes/dogs.js');
+
 require('express-async-errors');
 const app = express();
 
@@ -22,8 +24,7 @@ const loggerMiddleware = (req, res, next) => {
 app.use(loggerMiddleware);
 
 // -------------------------------------------------------------------------- //
-// Import the dog router
-const dogsRouter = require('./routes/dogs.js');
+
 // connect the dog router
 app.use('/dogs', dogsRouter);
 
